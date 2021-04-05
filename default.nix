@@ -13,6 +13,10 @@ pkgs.mkShell rec {
                 ipython
                 nose
                 sqlalchemy
+                flask
+                pandas
+                numpy
+                dash
             ];
         })
     ]);
