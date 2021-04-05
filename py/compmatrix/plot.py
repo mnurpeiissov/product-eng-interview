@@ -55,6 +55,7 @@ def update_figure(value):
 
     else:
         input_data = data_utils.get_updated_data_from_df(value, input_data_original)
+
         fig = go.Figure(data=ff.create_annotated_heatmap(
             z=data_utils.normalize_by_row(input_data.loc[value + ['None'], value+ ['None']].values),
             y=value + ['None'],
@@ -78,9 +79,10 @@ def update_figure(value):
 
 @app.callback(
     Output('table', 'figure'),
-    Input('heatmap', 'clickData')
+    [Input('heatmap', 'clickData'),
+     Input('SDK_dropdown', 'value')]
 )
-def display_click_data(clickData):
+def display_click_data(clickData, value):
     if not clickData:
         return go.Figure(data=[go.Table(header=dict(values=['Used Apps']), cells=dict(values=[]))])
     else:
@@ -90,8 +92,8 @@ def display_click_data(clickData):
             label = "Apps using: " + label_x
         else:
             label = 'Apps churned to {} from {}'.format(label_y, label_x)
-
-        apps = used_apps.loc[label_y][label_x]
+        updated_apps = data_utils.get_updated_used_apps(value, used_apps)
+        apps = updated_apps.loc[label_y][label_x]
         apps = app_names[app_names['id'].isin(apps)]
         apps = apps['name']
         table = go.Figure(data=[go.Table(header=dict(values=[label]), cells=dict(values=[apps]))])

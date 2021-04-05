@@ -89,6 +89,18 @@ def get_updated_data_from_df(col_names_chosen, input_data_original):
         copy_of_data.loc['None']['None'] += input_data_original.loc[col_name][col_name]
     return copy_of_data
 
+def get_updated_used_apps(col_names_chosen, input_data):
+    copy_of_data = input_data.copy(deep=True)
+    for col_name in col_names_chosen:
+        copy_of_data.loc[col_name]['None'] = np.concatenate((input_data.loc[col_name, ~input_data.columns.isin(col_names_chosen)]))
+        copy_of_data.loc['None'][col_name] = np.concatenate((input_data.loc[~input_data.columns.isin(col_names_chosen), col_name]))
+    for col_name in input_data.columns:
+        if col_name in col_names_chosen or col_name == 'None':
+            continue
+        copy_of_data.loc['None']['None'] = np.concatenate((copy_of_data.loc['None']['None'],input_data.loc[col_name][col_name]))
+    return copy_of_data
+
+
 def z_to_text(z):
     result = np.zeros(z.shape)
     for i in range(len(z)):
