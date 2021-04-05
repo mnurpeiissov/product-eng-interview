@@ -53,12 +53,12 @@ def get_competitive_matrix():
         if len(values) > 1:
             for i, value in enumerate(values):
                 if i == 0:
-                    idx = sdk_to_index[(value)]
+                    idx = sdk_to_index[value]
                     competitive_matrix[idx][idx] += 1
                     used_apps[idx][idx] += [key]
                     old_idx = idx
                 else:
-                    idx = sdk_to_index[(value)]
+                    idx = sdk_to_index[value]
                     competitive_matrix[idx][idx] += 1
                     used_apps[idx][idx] += [key]
 
@@ -70,7 +70,7 @@ def get_competitive_matrix():
                     old_idx = idx
             old_idx = None
         elif len(values) == 1:
-            idx = sdk_to_index[(value)]
+            idx = sdk_to_index[value]
             competitive_matrix[idx][idx] += 1
     competitive_matrix = pd.DataFrame(competitive_matrix, columns=sdk_names + ['None'], index=sdk_names + ['None'])
     apps = pd.DataFrame(used_apps, columns=sdk_names + ['None'], index=sdk_names + ['None'])
@@ -115,12 +115,5 @@ def normalize_by_row(data):
         data[row][:] *= 100
         data[row][:] = np.round(data[row][:])
     return data
-
-
-if __name__ == '__main__':
-    #conn = create_connection('data.db')
-    #df1, df2, df3 = select_all_tasks(conn)
-    #df1['release_date'] = pd.to_datetime(df1['release_date'])
-    comp, apps, df = get_competitive_matrix()
 
 
